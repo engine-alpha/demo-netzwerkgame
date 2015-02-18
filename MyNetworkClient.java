@@ -8,7 +8,9 @@ import ea.*;
 public class MyNetworkClient
         extends ea.Client
 {
+    // Damit der CLient 'weiss', zu welcher der beiden Spielfiguren er gehoert 
     private int meinIndex;
+    // Referenz auf das GrfikFenster des entsprechenden CLients, um dort Aenderungen zu bewirken
     private MyGame spiel;
 
 
@@ -26,12 +28,12 @@ public class MyNetworkClient
 
 
     /**
-     * Vom der Klasse Client vorgeschriebene Methode zum Empfangen eines Strings von der Netzwerk-Gegenstelle.
+     * Von der Klasse Client vorgeschriebene Methode zum Empfangen eines Strings von der Netzwerk-Gegenstelle.
      * Diese Methode wird auftomatisch aufgerufen, sobald von der Netzwerk-Gegenstelle ein String lokal ankommt.
      * <br />
      *
      * Hier wird ein sehr primitives Protokoll mit nur 3 "Befehlen" verwendet:
-     * anmelden, bewegen, Farbe aendern                                                         <br />
+     * neu, bewegen, farbwechsel                                                         <br />
      *
      * Jeder Client sendet jeden Aenderungs-Wunsch erst an den Server und dieser sendet
      * danach als Reaktion an beide Clients den entsprechenden "Befehl" zur Aenderung
@@ -44,21 +46,22 @@ public class MyNetworkClient
     {
         String[] befehle = s. split( ":" );
         
-        // neu:name:index:x:y
+        // Struktur des 1. Befehls:     neu:name:index:x:y
         if ( befehle[0].equals("neu") ) {
             this.spiel.neuerSpieler( befehle[1] , Integer.parseInt(befehle[2]) , Integer.parseInt(befehle[3]) , Integer.parseInt(befehle[4]) );
+            // Erst nach der ersten Server-Antwort kann der Index des Spielers festgelgt werden
             if ( befehle[1].equals( this.spiel.name() ) )  {
                 this.meinIndex = Integer.parseInt( befehle[2] );
                 this.spiel.setzeMeinIndex( this.meinIndex );
             }
         }
         
-        // bewegen:index:dx:dy
+        // Struktur des 1. Befehls:     bewegen:index:dx:dy
         else if ( befehle[0].equals("bewegen") ) {
             this.spiel.bewegen( Integer.parseInt(befehle[1]) , Integer.parseInt(befehle[2]) , Integer.parseInt(befehle[3]) );
         }
         
-        // farbwechsel:index:farbe
+        // Struktur des 1. Befehls:     farbwechsel:index:farbe
         else if ( befehle[0].equals("farbwechsel") ) {
             this.spiel.farbwechsel( Integer.parseInt(befehle[1]) , befehle[2] );
         }
@@ -82,7 +85,7 @@ public class MyNetworkClient
     /**
      * Nennt den Index des zugehoerigen Spielers, der vorher mit dem Server ausgehandelt wurde.     <br />
      *
-     * Die beiden Spieler werden bei den MyGame-Objekten lokal in einem Array verwaltet.
+     * Die beiden Spieler werden bei den MyGame-Objekten lokal in einem Array (oder einer java.util.ArrayList) verwaltet.
      * Dieser Index beschreibt, unter welchem Index der Spieler bei seinem MyGame-Objekt verwaltet wird.
      *
      * @return      Der Index, unter dem der Spieler lokal verwaltet wird. (0 oder 1)

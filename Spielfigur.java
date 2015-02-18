@@ -3,11 +3,12 @@ import ea.*;
 /**
  * @Description     Einfache grafische Darstellung einer Spielfigur im Demo-Netzwerk-Spiel.
  *
- * @Author          Mike Ganshorn
+ * @Author          mike ganshorn
  *
- * @Version         1.1 (2015-02-13)
+ * @Version         1.1 (2015-02-18)
  */
 public class Spielfigur
+        // Die Bestandteile der Spielfigur sollen in einem Knoten gruppoert werden
         extends ea.Knoten
 {
     private ea.Kreis k;
@@ -26,9 +27,9 @@ public class Spielfigur
         super();
         this.k = new ea.Kreis( x , y , 100 );
         this.k.farbeSetzen( "rot" );
-        this.add( this.k );
+        this.add( this.k );     // Kreis der Gruppierung hinzu fuegen
         this.t = new ea.Text( x + 20 , y + 30 , name );
-        this.add( this.t );
+        this.add( this.t );     // Text der Gruppierung hinzu fuegen
     }
 
 
